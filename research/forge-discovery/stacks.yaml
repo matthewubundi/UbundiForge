@@ -1,0 +1,323 @@
+# Forge Stack Catalog
+# Generated: 2026-03-17
+# Source: Ubundi portfolio analysis (8 repos)
+
+stacks:
+
+  # === EXISTING FORGE STACKS (validated against portfolio) ===
+
+  - id: fastapi
+    label: "FastAPI + PostgreSQL"
+    repo_examples:
+      - Cortex
+      - TooToo (backend)
+      - "Ubundi Reddit Scraper"
+    languages:
+      - python
+    frameworks:
+      - fastapi
+      - uvicorn
+    package_managers:
+      - uv
+    common_libraries:
+      - pydantic: "Data validation and serialization"
+      - pydantic-settings: "Environment-based config"
+      - python-dotenv: "Local env file loading"
+      - asyncpg: "Async PostgreSQL driver"
+      - pgvector: "Vector similarity search"
+      - openai: "LLM API client"
+      - structlog: "Structured logging"
+      - tiktoken: "Token counting"
+      - boto3: "AWS SDK"
+      - backoff: "Exponential backoff decorator"
+      - tenacity: "Retry logic"
+      - rank-bm25: "BM25 keyword search"
+      - numpy: "Numerical operations"
+      - httpx: "Async HTTP client"
+    typical_services:
+      - PostgreSQL (with pgvector extension)
+      - OpenAI API
+      - AWS (S3, ECS, Lambda, DynamoDB)
+    default_structure:
+      - "api/          # FastAPI routes, schemas, middleware"
+      - "api/routes/   # Route modules"
+      - "src/          # Core runtime / domain logic"
+      - "tests/        # Test suites"
+      - "tests/unit/   # Fast isolated tests"
+      - "tests/integration/  # Multi-component tests"
+      - "scripts/      # Utility scripts"
+      - "docs/         # Documentation"
+      - "agent_docs/   # Progressive disclosure task guides"
+      - ".env.example  # Environment template"
+      - "Dockerfile    # Docker image definition"
+      - "CLAUDE.md     # AI assistant instructions"
+      - "pyproject.toml # Project metadata + tool config"
+    common_dev_commands:
+      lint: "uv run ruff check src api"
+      format: "uv run ruff format src api"
+      format_check: "uv run ruff format --check src api"
+      typecheck: "uv run mypy src"
+      test: "uv run pytest tests/unit/ -v --tb=short"
+      test_coverage: "uv run pytest tests/unit/ --cov=src --cov-report=term-missing"
+      run: "uvicorn api.app:app --host 0.0.0.0 --port 8000"
+    should_be_supported_by_forge: true
+    support_priority: high
+    notes: >
+      Primary backend stack across 3 repos. Cortex and TooToo both use this pattern
+      with async/await throughout. PostgreSQL with pgvector is the standard database
+      pairing. uv is the standard package manager. Ruff for linting, MyPy for type
+      checking, pytest for testing. Always includes .env.example and Dockerfile.
+
+  - id: nextjs
+    label: "Next.js + React"
+    repo_examples:
+      - TooToo (frontend)
+    languages:
+      - typescript
+    frameworks:
+      - nextjs
+      - react
+    package_managers:
+      - npm
+    common_libraries:
+      - "@clerk/nextjs": "Authentication and user management"
+      - "@segment/analytics-next": "Product analytics"
+      - "@intercom/messenger-js-sdk": "Customer support widget"
+      - tailwindcss: "Utility-first CSS"
+      - "@tailwindcss/postcss": "PostCSS integration"
+      - uuid: "Unique ID generation"
+    typical_services:
+      - Clerk (auth)
+      - Segment (analytics)
+      - Intercom (support)
+      - FastAPI backend (API)
+    default_structure:
+      - "src/app/       # Next.js App Router pages"
+      - "src/components/ # React components"
+      - "src/lib/       # Utility functions and helpers"
+      - "public/        # Static assets"
+      - "next.config.ts # Next.js configuration"
+      - "tailwind.config.ts # Tailwind configuration"
+      - "tsconfig.json  # TypeScript configuration"
+      - "package.json   # Dependencies and scripts"
+    common_dev_commands:
+      dev: "npm run dev"
+      build: "npm run build"
+      lint: "npm run lint"
+      typecheck: "npx tsc --noEmit"
+    should_be_supported_by_forge: true
+    support_priority: high
+    notes: >
+      Only one frontend repo in the portfolio (TooToo) but it's comprehensive.
+      Uses Next.js App Router with React 19, TypeScript strict mode, Tailwind CSS 4.
+      Clerk for auth is the standard choice. Forge already supports this stack.
+
+  - id: fullstack-monorepo
+    label: "FastAPI + Next.js Monorepo"
+    repo_examples:
+      - TooToo
+    languages:
+      - python
+      - typescript
+    frameworks:
+      - fastapi
+      - nextjs
+      - react
+    package_managers:
+      - uv
+      - npm
+    common_libraries:
+      # Backend
+      - fastapi: "Web framework"
+      - pydantic: "Validation"
+      - asyncpg: "PostgreSQL driver"
+      - pgvector: "Vector search"
+      - openai: "LLM API"
+      - structlog: "Logging"
+      # Frontend
+      - "@clerk/nextjs": "Auth"
+      - tailwindcss: "Styling"
+      - "@segment/analytics-next": "Analytics"
+    typical_services:
+      - PostgreSQL + pgvector
+      - OpenAI API
+      - Clerk (auth)
+      - Segment (analytics)
+      - AWS (S3, EC2)
+    default_structure:
+      - "api/           # FastAPI backend"
+      - "frontend/      # Next.js frontend"
+      - "domain/        # Shared domain logic (Python)"
+      - "application/   # Business orchestration (Python)"
+      - "infrastructure/ # External service adapters (Python)"
+      - "tests/         # Backend tests"
+      - "scripts/       # Utility scripts"
+      - "docker/        # Docker configs"
+      - "docker-compose.yml"
+      - ".env.example"
+      - "CLAUDE.md"
+    common_dev_commands:
+      backend_run: "uvicorn api.server:app --reload --port 8000"
+      frontend_dev: "cd frontend && npm run dev"
+      lint: "uv run ruff check . && cd frontend && npm run lint"
+      test: "uv run pytest tests/"
+    should_be_supported_by_forge: true
+    support_priority: high
+    notes: >
+      TooToo is the exemplar. Clean architecture with strict layering.
+      Forge already supports "both" option which maps here. This stack should
+      generate both frontend and backend in one project with docker-compose
+      for local orchestration.
+
+  # === NEW STACK CANDIDATES (discovered from portfolio) ===
+
+  - id: python-cli
+    label: "Python CLI Tool"
+    repo_examples:
+      - Forge
+      - cortex-benchmark
+    languages:
+      - python
+    frameworks:
+      - typer  # or argparse
+    package_managers:
+      - uv
+    common_libraries:
+      - typer: "CLI framework with auto-help"
+      - rich: "Terminal styling and output"
+      - questionary: "Interactive prompts"
+      - click: "Alternative CLI framework"
+    typical_services: []
+    default_structure:
+      - "src/           # Main package"
+      - "src/__init__.py"
+      - "src/cli.py     # CLI entrypoint"
+      - "tests/         # Test suite"
+      - "pyproject.toml"
+      - "README.md"
+      - "CLAUDE.md"
+      - ".gitignore"
+    common_dev_commands:
+      lint: "uv run ruff check src"
+      format: "uv run ruff format src"
+      test: "uv run pytest tests/"
+      run: "uv run python -m src.cli"
+    should_be_supported_by_forge: true
+    support_priority: medium
+    notes: >
+      Two repos use this pattern (Forge itself and cortex-benchmark).
+      Forge uses Typer+Rich+questionary; cortex-benchmark uses argparse.
+      Typer should be the default for new CLIs. Useful recipe for internal tools.
+
+  - id: typescript-npm-package
+    label: "TypeScript npm Package"
+    repo_examples:
+      - openclaw-cortex
+    languages:
+      - typescript
+    frameworks: []
+    package_managers:
+      - npm
+    common_libraries:
+      - zod: "Schema validation"
+      - vitest: "Test runner"
+      - typescript: "Compiler"
+    typical_services: []
+    default_structure:
+      - "src/           # TypeScript source"
+      - "src/index.ts   # Public entrypoint"
+      - "tests/         # Test suite"
+      - "tests/unit/    # Unit tests"
+      - "tests/integration/ # Integration tests"
+      - "dist/          # Compiled output (gitignored)"
+      - "tsconfig.json  # TypeScript config"
+      - "vitest.config.ts # Test config"
+      - "package.json"
+      - "README.md"
+      - "CLAUDE.md"
+      - "CHANGELOG.md"
+      - ".gitignore"
+    common_dev_commands:
+      build: "tsc"
+      test: "vitest run"
+      test_watch: "vitest"
+      typecheck: "npx tsc --noEmit"
+      clean: "rm -rf dist"
+    should_be_supported_by_forge: true
+    support_priority: medium
+    notes: >
+      openclaw-cortex is the exemplar. Strict TypeScript, ESM-only, ES2022 target,
+      Vitest for testing, Zod for runtime validation. Good for libraries, plugins,
+      and SDK packages. No linter configured (relies on tsc strict mode).
+
+  - id: python-worker
+    label: "Python Scheduled Worker / Service"
+    repo_examples:
+      - "Ubundi Reddit Scraper"
+    languages:
+      - python
+    frameworks: []
+    package_managers:
+      - uv  # or pip
+    common_libraries:
+      - boto3: "AWS SDK (DynamoDB, S3, etc.)"
+      - requests: "HTTP client"
+    typical_services:
+      - AWS DynamoDB
+      - AWS ECS Fargate
+      - AWS EventBridge (scheduling)
+      - Slack API
+    default_structure:
+      - "src/           # Main package"
+      - "src/__init__.py"
+      - "src/cli.py     # CLI dispatcher"
+      - "src/models.py  # Data models"
+      - "src/storage.py # Storage layer"
+      - "src/services.py # Business logic"
+      - "config/        # Configuration files"
+      - "infra/         # CloudFormation / Terraform"
+      - "tests/         # Test suite"
+      - "Dockerfile"
+      - ".env.example"
+      - "pyproject.toml"
+      - "README.md"
+      - "CLAUDE.md"
+    common_dev_commands:
+      lint: "uv run ruff check src"
+      test: "python -m pytest tests/"
+      run: "python src/main.py collect"
+      docker_build: "docker build -t worker ."
+    should_be_supported_by_forge: true
+    support_priority: low
+    notes: >
+      One repo uses this pattern (Reddit Scraper). Scheduled tasks on ECS Fargate
+      with EventBridge triggers. Protocol-based storage abstraction for testability.
+      CloudFormation for infrastructure. ARM64 for cost optimization.
+
+  - id: ai-agent-skill
+    label: "AI Agent Skill / Plugin"
+    repo_examples:
+      - kwanda-skills
+      - openclaw-cortex (skill/ directory)
+    languages:
+      - markdown
+      - yaml
+      - typescript  # optional for infrastructure
+    frameworks: []
+    package_managers: []
+    common_libraries: []
+    typical_services:
+      - OpenClaw runtime
+      - Google Workspace API
+      - Cortex API
+    default_structure:
+      - "SKILL.md       # Agent instructions (YAML frontmatter + Markdown)"
+      - "README.md      # Human-readable documentation"
+      - "CHANGELOG.md   # Version history"
+    common_dev_commands: {}
+    should_be_supported_by_forge: false
+    support_priority: low
+    notes: >
+      Highly specific to the OpenClaw/Kwanda ecosystem. Skills are declarative
+      Markdown files, not executable code. Not a good fit for Forge scaffolding
+      since they don't involve project setup, dependencies, or build systems.
