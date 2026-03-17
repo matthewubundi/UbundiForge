@@ -34,12 +34,12 @@ STACK_CHOICES = [
 ### 1.2 Update Routing for New Stacks in `forge/router.py`
 
 **Current state:** Only routes nextjs/fastapi/both
-**Recommendation:** Add routing for new stacks
+**Recommendation:** Route all stacks to Claude for now, including the newer stack types.
 
 **Changes to `forge/router.py`:**
 ```python
 ROUTING = {
-    "nextjs": "gemini",
+    "nextjs": "claude",
     "fastapi": "claude",
     "both": "claude",
     "python-cli": "claude",      # Claude excels at Python scaffolding
@@ -47,7 +47,7 @@ ROUTING = {
 }
 ```
 
-**Evidence:** All Python repos in the portfolio show patterns Claude handles well (Pydantic, pytest, Ruff). The TypeScript package pattern (strict mode, Vitest, Zod) is also Claude's strength.
+**Evidence:** The portfolio research does not justify a special `nextjs→gemini` route yet, and the current product decision is to keep routing simple until a dedicated comparison turn is done.
 
 **Files affected:** `forge/router.py`
 
@@ -149,7 +149,7 @@ STACK_LABELS = {
 ### 2.1 Support Recipe Selection in Addition to Stack Selection
 
 **Current state:** Forge asks 5 questions (name, stack, description, docker, extra).
-**Recommendation:** After stack selection, optionally ask for a recipe that adds targeted libraries and structure.
+**Recommendation:** Defer this for now. Keep the flow simple and use targeted follow-ups such as auth-provider and CI questions instead of recipe selection.
 
 **Example flow:**
 ```
@@ -166,33 +166,36 @@ Recipe? (optional)
 - Reddit Scraper is a "scheduled worker" that extends Python with AWS scheduling
 - These are distinct enough to warrant different scaffolds but share the same stack base
 
-**Implementation:**
-- Add a `recipes.py` module that maps stack → available recipes
-- Each recipe adds additional prompt instructions (libraries, structure, .env.example extras)
-- Inject recipe context into prompt_builder alongside conventions
+**Implementation:** No code change for now. Revisit after more scaffold-quality evidence is collected.
 
-**Files affected:** New `forge/recipes.py`, `forge/prompts.py`, `forge/prompt_builder.py`
+**Files affected:** None for now
 
 ---
 
 ### 2.2 Support Optional Integrations as Structured Prompts
 
 **Current state:** Users can type "add Clerk auth" in the extra instructions field.
-**Recommendation:** Add a multi-select question for common integrations.
+**Recommendation:** Add structured follow-ups for optional integrations, especially auth provider selection and CI generation.
 
 **Example flow:**
 ```
 Optional integrations? (select all that apply)
-  [ ] Clerk authentication
+  [ ] Authentication
   [ ] OpenAI / LLM integration
   [ ] Segment analytics
   [ ] AWS S3 file storage
   [ ] PostgreSQL + pgvector
   [ ] GitHub Actions CI
+
+Authentication provider? (when authentication is selected)
+  > Clerk
+  > Supabase Auth
+  > Auth.js / NextAuth
+  > Better Auth
 ```
 
 **Evidence:**
-- Clerk: 1/1 frontend repos
+- Clerk: 1/1 frontend repos, but product direction is to keep auth optional
 - OpenAI: 3/8 repos
 - Segment: 1/8 repos
 - boto3/S3: 3/8 repos
@@ -239,7 +242,8 @@ Optional integrations? (select all that apply)
 2. Always include "Key Patterns" section (present in Cortex, openclaw-cortex)
 3. Always include "Non-Obvious Things" section (present in Cortex, openclaw-cortex)
 4. Add "Progressive Disclosure" section pointing to agent_docs/ (present in Cortex, TooToo)
-5. Add "Verify Changes" section with exact lint/test commands (present in all CLAUDE.md files)
+5. Generate `agent_docs/` starter docs that match the progressive-disclosure section
+6. Add "Verify Changes" section with exact lint/test commands (present in all CLAUDE.md files)
 
 **Evidence:**
 - `Cortex/CLAUDE.md` — not directly readable but referenced in README
@@ -256,7 +260,7 @@ Optional integrations? (select all that apply)
 ### 3.1 Add CI Pipeline Generation
 
 **Current state:** No CI pipeline generated.
-**Recommendation:** Add optional GitHub Actions CI generation.
+**Recommendation:** Ask whether CI should be included. If yes, either let the user choose CI actions or generate a blank starter workflow.
 
 **Standard CI template (from portfolio):**
 - **Python:** lint (ruff check) → format check → type check (mypy) → unit tests (pytest)
@@ -264,7 +268,9 @@ Optional integrations? (select all that apply)
 
 **Evidence:** 3/8 repos have GitHub Actions CI. All follow the same pattern.
 
-**Implementation:** Add "Include GitHub Actions CI?" confirm question. Generate `.github/workflows/ci.yml`.
+**Implementation:** Add "Include GitHub Actions CI?" confirm question, then either:
+- collect desired CI actions, or
+- generate a blank `.github/workflows/ci.yml` starter template with placeholders.
 
 **Files affected:** `forge/prompts.py`, `forge/prompt_builder.py`
 

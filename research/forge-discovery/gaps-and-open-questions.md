@@ -118,7 +118,7 @@ Areas where the portfolio does not give enough evidence, plus questions that nee
 
 **Trade-off:** More choices = more precision but slower flow. Forge's design principle is "speed over features."
 
-**Question for Matt:** Is the extra question worth the scaffold quality improvement? Or should this be handled via the "extra instructions" field?
+**Decision:** Not for now. Keep the flow faster and rely on stack-specific defaults plus extra instructions until there is stronger evidence that recipes improve outcomes enough to justify the extra step.
 
 ---
 
@@ -127,7 +127,9 @@ Areas where the portfolio does not give enough evidence, plus questions that nee
 
 **Trade-off:** CI is useful but adds complexity to the scaffold. Some projects may not need it immediately.
 
-**Question for Matt:** Include CI generation as a default question, an optional flag, or not at all?
+**Decision:** Ask whether CI should be included. If yes, Forge should either:
+- run a short questionnaire about which CI actions to include, or
+- generate a blank GitHub Actions template for later customization.
 
 ---
 
@@ -136,7 +138,7 @@ Areas where the portfolio does not give enough evidence, plus questions that nee
 
 **Trade-off:** Multiple convention files would make Forge more general but add complexity.
 
-**Question for Matt:** Is Forge exclusively for Ubundi projects, or should it support client-specific convention files?
+**Decision:** Not for now. Keep Forge focused on Ubundi conventions rather than adding multi-convention support yet.
 
 ---
 
@@ -145,7 +147,7 @@ Areas where the portfolio does not give enough evidence, plus questions that nee
 
 **Trade-off:** The routing logic is easy to update but hard to validate without A/B testing.
 
-**Question for Matt:** Has the gemini→nextjs routing proven better in practice? Should all stacks default to Claude?
+**Decision:** Default all stacks to Claude for now, then revisit after dedicated routing-quality research.
 
 ---
 
@@ -154,7 +156,7 @@ Areas where the portfolio does not give enough evidence, plus questions that nee
 
 **Trade-off:** Including Clerk makes scaffolds production-ready faster but adds a dependency on a paid service.
 
-**Question for Matt:** Should Clerk be a default integration for Next.js/SaaS recipes, or always optional?
+**Decision:** Keep auth optional. Forge should support multiple auth provider choices instead of assuming a single default provider.
 
 ---
 
@@ -163,4 +165,4 @@ Areas where the portfolio does not give enough evidence, plus questions that nee
 
 **Trade-off:** Generating empty agent_docs/ structure is easy. Generating meaningful content requires understanding the project deeply.
 
-**Question for Matt:** Should Forge create a skeleton agent_docs/ directory with placeholder files, or leave this for the developer to add later?
+**Decision:** Yes. Forge should generate an `agent_docs/` starter structure that aligns with the scaffolded `CLAUDE.md`.

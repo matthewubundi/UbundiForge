@@ -86,7 +86,7 @@ These appear consistently across multiple repos and should be Forge defaults wit
 
 4. **Always include `.gitignore`** — Present in all repos. Standard Python/Node patterns.
 
-5. **Include `agent_docs/` for progressive disclosure** — Present in 3/8 repos (Cortex, cortex-benchmark, TooToo). Used for task-specific deep dives.
+5. **Include `agent_docs/` for progressive disclosure** — Present in 3/8 repos (Cortex, cortex-benchmark, TooToo). Generate starter docs that align with `CLAUDE.md`.
    - Evidence: `Cortex/agent_docs/`, `cortex-benchmark/agent_docs/`, `TooToo/agent_docs/`
 
 6. **Include `scripts/` for utilities** — Present in 5/8 repos. Validation scripts, data migration, CLI test harnesses.
@@ -103,7 +103,7 @@ These appear consistently across multiple repos and should be Forge defaults wit
 2. **CHANGELOG.md** — Present in 3/8 repos (cortex-benchmark, openclaw-cortex, kwanda-skills).
    - Evidence: Root-level CHANGELOG.md files
 
-3. **GitHub Actions for CI** — Present in 3/8 repos. Standard CI pattern: lint → typecheck → test.
+3. **When CI is requested, use GitHub Actions** — Present in 3/8 repos. Standard CI pattern: lint → typecheck → test, but CI itself should remain optional in Forge.
    - Evidence: `.github/workflows/ci.yml` in Cortex, cortex-benchmark, openclaw-cortex
 
 ---

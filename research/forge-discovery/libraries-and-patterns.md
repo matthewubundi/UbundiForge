@@ -24,11 +24,11 @@ Organized by category with frequency, usage, and Forge scaffold recommendations.
 
 | Library | Frequency | Repos | Role | Forge Recommendation |
 |---|---|---|---|---|
-| **Clerk** (via @clerk/nextjs) | 1/1 frontend repos | TooToo | Authentication + user management | **Default** for SaaS apps |
+| **Clerk** (via @clerk/nextjs) | 1/1 frontend repos | TooToo | Authentication + user management | **Optional provider choice** for SaaS apps |
 | **Segment** (via @segment/analytics-next) | 1/1 | TooToo | Product analytics | **Optional recipe** — not needed for all projects |
 | **Intercom** (via @intercom/messenger-js-sdk) | 1/1 | TooToo | Customer support chat widget | **Optional recipe** — SaaS-specific |
 
-**Verdict:** Clerk is the standard auth choice. Segment and Intercom are SaaS-specific additions that should be optional integrations, not defaults.
+**Verdict:** Clerk is the only portfolio-backed auth provider today, but Forge should still keep auth optional and support multiple provider choices. Segment and Intercom remain optional SaaS integrations.
 
 ---
 
@@ -36,12 +36,12 @@ Organized by category with frequency, usage, and Forge scaffold recommendations.
 
 | Library | Frequency | Repos | Role | Forge Recommendation |
 |---|---|---|---|---|
-| **Clerk** | 1/1 frontend | TooToo | Full user management (signup, login, sessions) | **Default** for Next.js SaaS apps |
+| **Clerk** | 1/1 frontend | TooToo | Full user management (signup, login, sessions) | **Optional** provider choice for Next.js SaaS apps |
 | **PyJWT** | 1/8 | TooToo | JWT token handling (backend) | Default for FastAPI backends with Clerk frontend |
 | **API key via Lambda proxy** | 1/8 | Cortex | API key validation + tenant mapping | **Default** for API-only services |
 | **Custom pairing codes** | 1/8 | Cortex | Cross-tenant agent linking | Repo-specific exception |
 
-**Verdict:** Two distinct auth patterns emerge: Clerk for user-facing apps, API key proxy for machine-to-machine APIs. Forge should support both.
+**Verdict:** Two distinct auth patterns emerge: hosted auth for user-facing apps and API-key auth for machine-to-machine APIs. Forge should keep auth optional and support multiple provider choices rather than defaulting Clerk.
 
 ---
 
@@ -184,7 +184,7 @@ select = ["E", "F", "I", "N", "W", "UP"]  # Cortex
 |---|---|---|---|---|
 | **Docker** | 3/8 | Cortex, TooToo, Reddit Scraper | Containerization | **Default** (optional toggle in Forge) |
 | **docker-compose** | 1/8 | TooToo | Local orchestration | Default for fullstack monorepos |
-| **GitHub Actions** | 3/8 | Cortex, cortex-benchmark, openclaw-cortex | CI/CD pipelines | **Default** |
+| **GitHub Actions** | 3/8 | Cortex, cortex-benchmark, openclaw-cortex | CI/CD pipelines | **Optional prompt-driven scaffold** |
 | **AWS ECS Fargate** | 2/8 | Cortex, Reddit Scraper | Container hosting | Default for production deployment |
 | **AWS Lambda** | 1/8 | Cortex (proxy) | Serverless functions | Optional |
 | **AWS CloudFormation** | 1/8 | Reddit Scraper | Infrastructure as code | Optional |
@@ -205,4 +205,4 @@ HEALTHCHECK CMD curl -f http://localhost:8000/ready || exit 1
 CMD ["uvicorn", "api.app:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
 ```
 
-**Verdict:** Docker with slim base images is standard. Single-worker Uvicorn. GitHub Actions for CI. ECS Fargate for deployment. Always include a health check.
+**Verdict:** Docker with slim base images is standard. Single-worker Uvicorn. GitHub Actions should be offered as an optional scaffold with either selected actions or a blank template. Always include a health check.
